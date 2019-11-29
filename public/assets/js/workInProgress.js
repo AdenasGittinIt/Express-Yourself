@@ -15,6 +15,26 @@ var getNotes = function() {
   });
 };
 
+var length = 8;
+var timestamp = +new Date;
+    
+var _getRandomInt = function( min, max ) {
+  return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+}
+    
+var generate = function() {
+  var ts = timestamp.toString();
+  var parts = ts.split( "" ).reverse();
+  var id = "";
+      
+  for( var i = 0; i < length; ++i ) {
+    var index = _getRandomInt( 0, parts.length - 1 );
+        id += parts[index];	 
+    }
+      return id;
+    }
+
+    
 // A function for saving a note to the db
 var saveNote = function(note) {
   return $.ajax({
@@ -33,14 +53,17 @@ var deleteNote = function(id) {
 };
 
 // If there is an activeNote, display it, otherwise render empty inputs
-var renderActiveNote = function() {
+const renderActiveNote = function() {
   $saveNoteBtn.hide();
 
   if (activeNote.id) {
     $noteTitle.attr("readonly", true);
     $noteText.attr("readonly", true);
+    $noteText.attr("data-id", activeNote.id);
+
     $noteTitle.val(activeNote.title);
     $noteText.val(activeNote.text);
+    
   } else {
     $noteTitle.attr("readonly", false);
     $noteText.attr("readonly", false);
@@ -49,18 +72,33 @@ var renderActiveNote = function() {
   }
 };
 
+
+
 // Get the note data from the inputs, save it to the db and update the view
-var handleNoteSave = function() {
+  var handleNoteSave = function() {
+  var id = generate();
   var newNote = {
+    id: id,
     title: $noteTitle.val(),
     text: $noteText.val()
   };
 
+  let newJson = [];
+  let data = newJson.push(req.body);
+  fs.writeFile('./db/db.json', JSON.stringify(data), (err) => {
+      if (err) throw err;
+      console.log('The file has been saved!');
+      console.log(newJson);
+    });
+
+
   saveNote(newNote).then(function(data) {
-    getAndRenderNotes(newNote);
-    renderActiveNote(newNote);
+  getAndRenderNotes(data);
+  renderActiveNote(data);
+  console.log(req.body)
   });
 };
+
 
 // Delete the clicked note
 var handleNoteDelete = function(event) {
@@ -107,7 +145,7 @@ var handleRenderSaveBtn = function() {
 var renderNoteList = function(notes) {
   $noteList.empty();
 
-  var noteListItems = [];
+  const noteListItems = [];
 
   for (var i = 0; i < notes.length; i++) {
     var note = notes[i];
@@ -131,6 +169,7 @@ var getAndRenderNotes = function() {
     renderNoteList(data);
   });
 };
+ 
 
 $saveNoteBtn.on("click", handleNoteSave);
 $noteList.on("click", ".list-group-item", handleNoteView);
@@ -140,4 +179,7 @@ $noteTitle.on("keyup", handleRenderSaveBtn);
 $noteText.on("keyup", handleRenderSaveBtn);
 
 // Gets and renders the initial list of notes
-getAndRenderNotes();
+getAndRenderNotes()
+
+
+

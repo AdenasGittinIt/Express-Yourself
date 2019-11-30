@@ -13,6 +13,7 @@ var getNotes = function() {
     url: "/api/notes",
     method: "GET"
   });
+  
 };
 
 // A function for saving a note to the db
@@ -21,7 +22,8 @@ var saveNote = function(note) {
     url: "/api/notes",
     data: note,
     method: "POST"
-  });
+  },
+  console.log(note));
 };
 
 // A function for deleting a note from the db
@@ -49,9 +51,30 @@ var renderActiveNote = function() {
   }
 };
 
+const length = 8;
+const timestamp = +new Date;
+
+const _getRandomInt = function (min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const generateID = function () {
+  let ts = timestamp.toString();
+  let parts = ts.split("").reverse();
+  let id = "";
+
+  for (let i = 0; i < length; ++i) {
+    let index = _getRandomInt(0, parts.length - 1);
+    id += parts[index];
+  }
+  return id;
+}
+
 // Get the note data from the inputs, save it to the db and update the view
-var handleNoteSave = function() {
-  var newNote = {
+const handleNoteSave = function() {
+  let id = generateID();
+  let newNote = {
+    id: id,
     title: $noteTitle.val(),
     text: $noteText.val()
   };
@@ -67,7 +90,7 @@ var handleNoteDelete = function(event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
 
-  var note = $(this)
+  let note = $(this)
     .parent(".list-group-item")
     .data();
 
@@ -104,12 +127,12 @@ var handleRenderSaveBtn = function() {
 };
 
 // Render's the list of note titles
-var renderNoteList = function(notes) {
+const renderNoteList = function (notes) {
   $noteList.empty();
 
-  var noteListItems = [];
+  const noteListItems = [];
 
-  for (var i = 0; i < notes.length; i++) {
+  for (let i = 0; i < notes.length; i++) {
     var note = notes[i];
 
     var $li = $("<li class='list-group-item'>").data(note);
@@ -126,8 +149,8 @@ var renderNoteList = function(notes) {
 };
 
 // Gets notes from the db and renders them to the sidebar
-var getAndRenderNotes = function() {
-  return getNotes().then(function(data) {
+var getAndRenderNotes = function () {
+  return getNotes().then(function (data) {
     renderNoteList(data);
   });
 };

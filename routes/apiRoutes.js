@@ -2,7 +2,7 @@ const notesData = require("../db/db.json");
 const express = require("express");
 const app = express();
 const fs = require("fs")
-// console.log(notesData);
+
 
 module.exports = function(app) {
     app.get("/api/notes", function(req, res) {
@@ -13,7 +13,7 @@ module.exports = function(app) {
 
     app.post("/api/notes", function(req, res) {
         console.log(`Received a ${req.method} request from ${req.url}`);
-        let thisNote = `,${JSON.stringify(req.body)}`
+        let thisNote = req.body
         notesData.push(thisNote)
         fs.writeFile('./db/db.json', JSON.stringify(notesData), (err) => {
             if (err) throw err;

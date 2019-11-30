@@ -27,9 +27,9 @@ var saveNote = function(note) {
 };
 
 // A function for deleting a note from the db
-var deleteNote = function(id) {
+const deleteNote = function(id) {
   return $.ajax({
-    url: "api/notes/" + id,
+    url: `api/notes/${id}`,
     method: "DELETE"
   });
 };
@@ -136,12 +136,13 @@ const renderNoteList = function (notes) {
     var note = notes[i];
 
     var $li = $("<li class='list-group-item'>").data(note);
+    //i want to set the data attibute with the id here (maybe)
     var $span = $("<span>").text(note.title);
     var $delBtn = $(
       "<i class='fas fa-trash-alt float-right text-danger delete-note'>"
     );
 
-    $li.append($span, $delBtn);
+    $li.append($span, $delBtn).attr("id", note.id);
     noteListItems.push($li);
   }
 

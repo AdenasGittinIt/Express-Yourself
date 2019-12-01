@@ -31,8 +31,8 @@ module.exports = function (app) {
 
         fs.writeFile('./db/db.json', JSON.stringify(updatedNotes), (err) => {
             if (err) throw err;
-            console.log('new notes written!! Yes, Lawd!!!');
-            // res.sendFile(path.join(__dirname, "../public/notes.html"))
+            console.log(`Note ${selectedForDelete} was deleted!!`);
+            res.json({ok: true})
         }
         );
 

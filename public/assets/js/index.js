@@ -24,7 +24,7 @@ var saveNote = function(note) {
     data: note,
     method: "POST"
   },
-  console.log(note)
+  // console.log(note)
   );
 };
 
@@ -34,6 +34,7 @@ const deleteNote = function(id) {
     url: `api/notes/${id}`,
     method: "DELETE"
   });
+  
 };
 
 // If there is an activeNote, display it, otherwise render empty inputs
@@ -53,6 +54,8 @@ var renderActiveNote = function() {
   }
 };
 
+
+//Stuff I copied off the internet to generate a random ID# for each note
 const length = 8;
 const timestamp = +new Date;
 
@@ -87,6 +90,8 @@ const handleNoteSave = function() {
   });
 };
 
+
+
 // Delete the clicked note
 var handleNoteDelete = function(event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
@@ -94,15 +99,19 @@ var handleNoteDelete = function(event) {
 
   let note = $(this)
     .parent(".list-group-item")
-    .data();
+    .data();  
 
   if (activeNote.id === note.id) {
     activeNote = {};
   }
+  
+  
+  let el = document.getElementById(note.id)
+  el.remove();
 
   deleteNote(note.id).then(function() {
-    getAndRenderNotes();
-    renderActiveNote();
+  getAndRenderNotes();
+  renderActiveNote();
   });
 };
 

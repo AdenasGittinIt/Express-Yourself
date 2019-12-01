@@ -26,15 +26,15 @@ module.exports = function (app) {
     );
 
     app.delete("/api/notes/:id", function (req, res) {
-        let deleteThisNote = req.params.id
-        console.log(`I want to delete ${deleteThisNote}`);
+        let selectedForDelete = req.params.id
+        const updatedNotes = notesData.filter(note => note.id !== selectedForDelete)
 
-        for (let i = 0; i < notesData.length; i++) {
-            if (deleteThisNote.id === notesData.id) {
-                notesData.splice(i-1, 1)
-            }
+        fs.writeFile('./db/db.json', JSON.stringify(updatedNotes), (err) => {
+            if (err) throw err;
+            console.log('new notes written!! Yes, Lawd!!!');
+            // res.sendFile(path.join(__dirname, "../public/notes.html"))
         }
-        res.sendFile(path.join(__dirname, "../public/notes.html"))
+        );
 
     })
 }

@@ -1,44 +1,45 @@
-var $noteTitle = $(".note-title");
-var $noteText = $(".note-textarea");
-var $saveNoteBtn = $(".save-note");
-var $newNoteBtn = $(".new-note");
-var $noteList = $(".list-container .list-group");
+// I updated some of the code to ES6 syntax for the sake of practice
+const $noteTitle = $(".note-title");
+const $noteText = $(".note-textarea");
+const $saveNoteBtn = $(".save-note");
+const $newNoteBtn = $(".new-note");
+const $noteList = $(".list-container .list-group");
 
 
 // activeNote is used to keep track of the note in the textarea
 var activeNote = {};
 
 // A function for getting all notes from the db
-var getNotes = function() {
+var getNotes = function () {
   return $.ajax({
     url: "/api/notes",
     method: "GET"
   });
-  
+
 };
 
 // A function for saving a note to the db
-var saveNote = function(note) {
+var saveNote = function (note) {
   return $.ajax({
     url: "/api/notes",
     data: note,
     method: "POST"
   },
-  // console.log(note)
+    // console.log(note)
   );
 };
 
 // A function for deleting a note from the db
-const deleteNote = function(id) {
+const deleteNote = function (id) {
   return $.ajax({
     url: `api/notes/${id}`,
     method: "DELETE"
   });
-  
+
 };
 
 // If there is an activeNote, display it, otherwise render empty inputs
-var renderActiveNote = function() {
+var renderActiveNote = function () {
   $saveNoteBtn.hide();
 
   if (activeNote.id) {
@@ -55,7 +56,7 @@ var renderActiveNote = function() {
 };
 
 
-//Stuff I copied off the internet to generate a random ID# for each note
+//Fancy stuff I copied off the internet to generate a random ID# for each note
 const length = 8;
 const timestamp = +new Date;
 
@@ -76,7 +77,7 @@ const generateID = function () {
 }
 
 // Get the note data from the inputs, save it to the db and update the view
-const handleNoteSave = function() {
+const handleNoteSave = function () {
   let id = generateID();
   let newNote = {
     id: id,
@@ -84,7 +85,7 @@ const handleNoteSave = function() {
     text: $noteText.val()
   };
 
-  saveNote(newNote).then(function(data) {
+  saveNote(newNote).then(function (data) {
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -93,43 +94,46 @@ const handleNoteSave = function() {
 
 
 // Delete the clicked note
-var handleNoteDelete = function(event) {
+var handleNoteDelete = function (event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
 
   let note = $(this)
     .parent(".list-group-item")
-    .data();  
+    .data();
 
   if (activeNote.id === note.id) {
     activeNote = {};
   }
-  
-  
-  let el = document.getElementById(note.id)
-  el.remove();
 
-  deleteNote(note.id).then(function() {
-  getAndRenderNotes();
-  renderActiveNote();
-  });
+  deleteNote(note.id)
+    .then(() => {
+      let el = document.getElementById(note.id)
+      el.remove();
+    });
+
+  // I achieved the delete functionality by comenting out the code that Trilogy provided below.  Hmmmm....
+  // .then( () => {
+  //   getAndRenderNotes();
+  //   renderActiveNote()
+  // });
 };
 
 // Sets the activeNote and displays it
-var handleNoteView = function() {
+var handleNoteView = function () {
   activeNote = $(this).data();
   renderActiveNote();
 };
 
 // Sets the activeNote to an empty object and allows the user to enter a new note
-var handleNewNoteView = function() {
+var handleNewNoteView = function () {
   activeNote = {};
   renderActiveNote();
 };
 
 // If a note's title or text are empty, hide the save button
 // Or else show it
-var handleRenderSaveBtn = function() {
+var handleRenderSaveBtn = function () {
   if (!$noteTitle.val().trim() || !$noteText.val().trim()) {
     $saveNoteBtn.hide();
   } else {
@@ -147,7 +151,6 @@ const renderNoteList = function (notes) {
     var note = notes[i];
 
     var $li = $("<li class='list-group-item'>").data(note);
-    //i want to set the data attibute with the id here (maybe)
     var $span = $("<span>").text(note.title);
     var $delBtn = $(
       "<i class='fas fa-trash-alt float-right text-danger delete-note'>"

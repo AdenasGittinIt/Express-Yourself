@@ -19,7 +19,7 @@ module.exports = function (app) {
         notesData.push(thisNote)
         fs.writeFile('./db/db.json', JSON.stringify(notesData), (err) => {
             if (err) throw err;
-            console.log('The note was appended to file!');
+            console.log(`Note ${thisNote.id} has been added to the db!`);
             res.sendFile(path.join(__dirname, "../public/notes.html"));
         });
     }
@@ -32,7 +32,7 @@ module.exports = function (app) {
         fs.writeFile('./db/db.json', JSON.stringify(updatedNotes), (err) => {
             if (err) throw err;
             console.log(`Note ${selectedForDelete} was deleted!!`);
-            res.json({ok: true})
+            res.json({ ok: true })
         }
         );
 

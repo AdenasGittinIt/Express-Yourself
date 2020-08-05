@@ -6,8 +6,10 @@ While coding this app I gained experience creating API routes and utilized the E
 
 ## User Story
 
-**As a** user, I want to be able to write and save notes
+**As a** busy person
+
 **I want to** write, save and delete notes 
+
 **So That** I can organize my thoughts and keep track of tasks I need to complete
 
 ## Take it for a spin... [Click Here](https://express-yourself-note-taker.herokuapp.com/)

@@ -1,8 +1,8 @@
 # Express-Yourself
 
-A note taker app developed to learn how to configure an Express.js application capable of handling GET requests, POST reuqests and server static HTML files.
+A note taker app developed to learn how to configure an Express.js application capable of handling GET requests, POST reuqests and serve static HTML files.
 
-While coding this app I gained experience creating HTML routes, API routes and utilized the Express fs module to store and retrieve notes to a JSON file.
+While coding this app I gained experience creating API routes and utilized the Express fs module to store and retrieve notes to a JSON file.
 
 ## User Story
 
